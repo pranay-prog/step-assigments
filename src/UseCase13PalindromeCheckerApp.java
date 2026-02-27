@@ -1,0 +1,91 @@
+import java.util.*;
+
+public class UseCase13PalindromeCheckerApp {
+
+    // 1️⃣ Two-Pointer Approach
+    public static boolean twoPointerCheck(String input) {
+        String normalized = input.replaceAll("\\s+", "").toLowerCase();
+        int left = 0;
+        int right = normalized.length() - 1;
+
+        while (left < right) {
+            if (normalized.charAt(left) != normalized.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+
+    // 2️⃣ Stack Approach
+    public static boolean stackCheck(String input) {
+        String normalized = input.replaceAll("\\s+", "").toLowerCase();
+        Stack<Character> stack = new Stack<>();
+
+        for (char ch : normalized.toCharArray()) {
+            stack.push(ch);
+        }
+
+        for (char ch : normalized.toCharArray()) {
+            if (ch != stack.pop()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // 3️⃣ Deque Approach
+    public static boolean dequeCheck(String input) {
+        String normalized = input.replaceAll("\\s+", "").toLowerCase();
+        Deque<Character> deque = new ArrayDeque<>();
+
+        for (char ch : normalized.toCharArray()) {
+            deque.addLast(ch);
+        }
+
+        while (deque.size() > 1) {
+            if (!deque.removeFirst().equals(deque.removeLast())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("===== UC13: Performance Comparison =====");
+        System.out.print("Enter a string: ");
+        String input = scanner.nextLine();
+
+        // Two Pointer Timing
+        long start1 = System.nanoTime();
+        boolean result1 = twoPointerCheck(input);
+        long end1 = System.nanoTime();
+
+        // Stack Timing
+        long start2 = System.nanoTime();
+        boolean result2 = stackCheck(input);
+        long end2 = System.nanoTime();
+
+        // Deque Timing
+        long start3 = System.nanoTime();
+        boolean result3 = dequeCheck(input);
+        long end3 = System.nanoTime();
+
+        System.out.println("\nResults:");
+        System.out.println("----------------------------------");
+        System.out.println("Two-Pointer Result: " + result1);
+        System.out.println("Execution Time: " + (end1 - start1) + " ns");
+
+        System.out.println("\nStack Result: " + result2);
+        System.out.println("Execution Time: " + (end2 - start2) + " ns");
+
+        System.out.println("\nDeque Result: " + result3);
+        System.out.println("Execution Time: " + (end3 - start3) + " ns");
+
+        scanner.close();
+    }
+}
